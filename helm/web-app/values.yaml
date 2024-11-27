@@ -1,0 +1,39 @@
+replicaCount: 2
+
+image:
+  repository: frontend-app
+  tag: "latest"
+  pullPolicy: IfNotPresent
+
+service:
+  type: LoadBalancer
+  port: 80
+
+resources:
+  requests:
+    memory: "256Mi"
+    cpu: "200m"
+  limits:
+    memory: "512Mi"
+    cpu: "500m"
+
+livenessProbe:
+  httpGet:
+    path: /health
+    port: 80
+  initialDelaySeconds: 5
+  periodSeconds: 10
+
+readinessProbe:
+  httpGet:
+    path: /ready
+    port: 80
+  initialDelaySeconds: 5
+  periodSeconds: 10
+
+env:
+  - name: FRONTEND_ENV_VAR
+    value: "default-frontend-value"
+
+envSecrets: []
+
